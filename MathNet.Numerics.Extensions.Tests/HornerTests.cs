@@ -19,19 +19,11 @@ namespace MathNet
             AssertHelpers.AlmostEqualRelative(expected, r[0], decimalPlaces);
         }
 
-        [TestCase(new double[] { 1, 1, 1, 1, 1, 1, 1 }, 1, 7, 12)]
-        public void HornerExactSimple(double[] n, double x, double expected, int decimalPlaces)
+        [TestCase(new double[] { 1, 0, -7, 1, 10, 1 }, 2, new double[] { 1,10,78,198,240,120}, 12)]
+        public void HornerExactSimple(double[] n, double x, double[] expected, int decimalPlaces)
         {
             double[] r = Mathematics.SpecialFunctions.HornersMethod(n, x);
-
-            Complex[] a = new Complex[r.Length];
-
-            for (int i = 0; i < a.Length; i++)
-                a[i] = new Complex(n[i], 0);
-
-            Complex[] r2 = Mathematics.SpecialFunctions.HornersAlgorithm(a, x);
-            AssertHelpers.AlmostEqualRelative(r[0], r2[0].Real, decimalPlaces);
-            AssertHelpers.AlmostEqualRelative(r[1], r2[1].Real, decimalPlaces);
+            AssertHelpers.AlmostEqualRelative(expected, r, decimalPlaces);            
         }
     }
 
