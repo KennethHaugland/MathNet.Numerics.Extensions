@@ -302,5 +302,77 @@ namespace Mathematics
 
             return HornersMethod(poly, x);
         }
+
+        /// <summary>
+        /// Horners evaluation of polynomial and all its derivatives
+        /// </summary>
+        /// <param name="a_n">Polynomial values a_n*x^n + ... + x*a_1 + a_0</param>
+        /// <param name="x">Evaluated at f(x)</param>
+        /// <returns>The value of the polynomial at x</returns>
+        private static double[] HornersMethod_Test(double[] a_n, double x)
+        {
+            // 
+            int n = a_n.Length;
+            double[,] a = new double[n + 1, n];
+
+            // Insert the polynomial in to the first row
+            for (int i = 0; i < n; i++)
+                a[0, i] = a_n[i];
+
+            // First column is just the leading coefficient
+            for (int i = 0; i < n; i++)
+                a[i + 1, 0] = a_n[0];
+
+            // Syntetic division =>
+            // polynomial evaluation at x
+            for (int i = 1; i < n; i++)
+            {
+                // no point in setting items
+                // that cannot be other than 
+                for (int j = 1; j < n - i + 1; j++)
+                {
+
+                    // Current qutient with
+                    // previous column
+                    double q2 = a[i, j - 1];
+
+                    // Last quotient
+                    // same column
+                    double q1 = a[i - 1, j];
+
+                    // Current quotient item
+                    a[i, j] = q2 * x + q1;
+                }
+            }
+
+            // Synthetic substitution =>
+            // polynomial differentiation at x
+            double[] result = new double[n];
+
+            // Adjust the quotient so that substitution
+            // method gives the derivative
+            for (int i = 1; i <= n; i++)
+                result[i - 1] = a[i, n - i] * Factorial(i - 1);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Simple integer factorial
+        /// </summary>
+        /// <param name="n"></param>
+        /// <returns></returns>
+        private static double Factorial(int n)
+        {
+            if (n == 0)
+                return 1;
+
+            double result = 1;
+
+            for (int i = 2; i <= n; i++)
+                result *= i;
+
+            return result;
+        }
     }
 }
